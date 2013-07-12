@@ -1,0 +1,25 @@
+{
+  "name": "mutation-observer",
+  "description": "Simple implementation of DOM mutation observer",
+  "version": "0.0.2",
+  "author": {
+    "name": "E.Naumenko"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EugeneN/mutation-observer"
+  },
+  "scripts": {
+    "postinstall": "coffee -c index.coffee"
+  },
+  "cafebuild": "coffee -c index.coffee",
+  "dependencies": {
+    "libprotein": "*",
+    "libprotocol": "*",
+  },
+  "engine": [
+    "node >=0.1.102"
+  ],
+  "main": "./index.js",
+  "readmeFilename": "README.md",
+}

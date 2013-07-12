@@ -1,5 +1,5 @@
 {
-  "name": "mutation-observer",
+  "name": "dom-mutation-observer",
   "description": "Simple implementation of DOM mutation observer",
   "version": "0.0.2",
   "author": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/EugeneN/mutation-observer"
+    "url": "https://github.com/EugeneN/dom-mutation-observer"
   },
   "scripts": {
     "postinstall": "coffee -c index.coffee"
@@ -15,11 +15,11 @@
   "cafebuild": "coffee -c index.coffee",
   "dependencies": {
     "libprotein": "*",
-    "libprotocol": "*",
+    "libprotocol": "*"
   },
   "engine": [
     "node >=0.1.102"
   ],
   "main": "./index.js",
-  "readmeFilename": "README.md",
+  "readmeFilename": "README.md"
 }

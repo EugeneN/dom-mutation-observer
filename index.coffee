@@ -7,6 +7,10 @@ $ = require 'jquery'
 {dispatch_impl} = require 'libprotocol'
 {info, warn, error, debug, nullog} = dispatch_impl 'ILogger', 'MutationObserver'
 
+ie_version = ->
+    myNav = root.navigator.userAgent.toLowerCase()
+    if "msie" in myNav then (parseInt(myNav.split('msie')[1])) else false;
+
 # http://stackoverflow.com/questions/10868104/can-you-have-a-javascript-hook-trigger-after-a-dom-elements-style-object-change
 MutationObserver = root.MutationObserver or root.WebKitMutationObserver or root.MozMutationObserver
 
@@ -58,8 +62,9 @@ observe_dom_added = (root_node, cont) ->
     # observes root_node for creation of new elements
     # calls cont with newly created elements
     # can't handle changes made by assigning to .innerHTML !
+    is_ie = ie_version()
 
-    if $.browser.msie and (parseInt $.browser.version, 10) < 9
+    if  is_ie and is_ie < 9
         {pub, sub} = pubsubhub()
 
         get_wrapper = (orig_fn_name) ->

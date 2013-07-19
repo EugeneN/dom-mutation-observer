@@ -82,8 +82,11 @@ observe_dom_added = (root_node, cont) ->
             o.prototype[orig_fn_name] = o.prototype[fn_name]
             o.prototype[fn_name] = get_wrapper (orig_fn_name)
             
-        ['appendChild', 'insertChild', 'replaceChild', 'cloneNode', 'insertBefore'].map (fn_name) -> 
-            patch Element, fn_name
+        try
+            ['appendChild', 'insertChild', 'replaceChild', 'cloneNode', 'insertBefore'].map (fn_name) -> 
+                patch Element, fn_name
+        catch e
+            error "Can't init dom observer, don't use IE7"
 
         sub 'node_changed', ([node]...) -> cont node
 

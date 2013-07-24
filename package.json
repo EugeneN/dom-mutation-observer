@@ -1,7 +1,7 @@
 {
   "name": "dom-mutation-observer",
   "description": "Simple implementation of DOM mutation observer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "E.Naumenko"
   },

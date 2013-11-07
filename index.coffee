@@ -2,7 +2,6 @@
 
 root = window 
 
-$ = require 'jquery'
 {pubsubhub} = require 'libprotein'
 {dispatch_impl} = require 'libprotocol'
 {info, warn, error, debug, nullog} = dispatch_impl 'ILogger', 'MutationObserver'
@@ -47,11 +46,11 @@ observe = (node, opts, handler) ->
         observer.observe node, { attributes: true, subtree: opts.subtree }
 
     else if isDOMAttrModifiedSupported
-        ($ node).bind 'DOMAttrModified', (e) ->
+        node.addEventListener "DOMAttrModified", (e) ->
             handler this, e.attrName
 
     else if 'onpropertychange' in root.document.body
-         ($ node).bind 'propertychange', (e) ->
+         node.onpropertychange (e) ->
             handler this, root.event.propertyName
 
     else

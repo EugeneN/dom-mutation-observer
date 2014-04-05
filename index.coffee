@@ -102,7 +102,6 @@ observe_dom_added = (root_node, cont) ->
         dom_parser = dispatch_impl 'IDom', root_node
         # TODO use MutationObserver instead when applicable
         dom_parser.add_event_listener "DOMNodeInserted", (event) ->
-            console.log "DOMNodeInserted", event.target, event.target.id
             dom_fragment_root = event.target
 
             if dom_fragment_root._meta_mut_observer is true

@@ -2,6 +2,7 @@
 
 root = window 
 
+$ = require 'jquery'
 {pubsubhub} = require 'libprotein'
 {dispatch_impl} = require 'libprotocol'
 {info, warn, error, debug, nullog} = dispatch_impl 'ILogger', 'MutationObserver'
@@ -46,16 +47,24 @@ observe = (node, opts, handler) ->
         observer.observe node, { attributes: true, subtree: opts.subtree }
 
     else if isDOMAttrModifiedSupported
-        node.addEventListener "DOMAttrModified", (e) ->
+        ($ node).bind 'DOMAttrModified', (e) ->
             handler this, e.attrName
 
     else if 'onpropertychange' in root.document.body
-         node.onpropertychange (e) ->
+         ($ node).bind 'propertychange', (e) ->
             handler this, root.event.propertyName
 
     else
         throw "DOM Mutation Observer not available"
 
+
+walkDOM = (node, f) ->
+        f node
+        node = node.firstChild
+
+        while node
+            walkDOM node, f
+            node = node.nextSibling
 
 observe_dom_added = (root_node, cont) ->
     # observes root_node for creation of new elements
@@ -63,7 +72,7 @@ observe_dom_added = (root_node, cont) ->
     # can't handle changes made by assigning to .innerHTML !
     is_ie = ie_version()
 
-    if  is_ie and is_ie < 9
+    if is_ie and is_ie < 9
         {pub, sub} = pubsubhub()
 
         get_wrapper = (orig_fn_name) ->
@@ -92,7 +101,18 @@ observe_dom_added = (root_node, cont) ->
     else
         dom_parser = dispatch_impl 'IDom', root_node
         # TODO use MutationObserver instead when applicable
-        dom_parser.add_event_listener "DOMNodeInserted", (event) -> cont event.target
+        dom_parser.add_event_listener "DOMNodeInserted", (event) ->
+            console.log "DOMNodeInserted", event.target, event.target.id
+            dom_fragment_root = event.target
+
+            if dom_fragment_root._meta_mut_observer is true
+                # debug "skipping sub-node", dom_fragment_root
+            else
+                # ie reports every node in an inserted sub-tree as a new event
+                # other browsers report only top-level nodes
+                # hence ie gets dna cells reinstantiated (sub-tree depth) times
+                walkDOM dom_fragment_root, (n) -> n._meta_mut_observer = true
+                cont dom_fragment_root
 
 
 module.exports = {observe, observe_dom_added}
